@@ -1,0 +1,26 @@
+[
+    {
+        "ConfigFile": "ServerConfig.ini",
+        "ConfigType": "ini",
+        "Subsections": [
+            {
+                "Heading": "ServerSettings",
+                "SettingMappings": {
+                    "server_name": "server_name",
+                    "server_public": "server_public",
+                    "server_port": "$GamePort",
+                    "query_port": "$QueryPort",
+                    "server_relay": "server_relay",
+                    "server_lan": "server_lan",
+                    "server_password": "server_password",
+                    "admin_password": "admin_password",
+                    "max_clients": "$MaxUsers",
+                    "max_admins": "max_admins",
+                    "autosave_mode": "autosave_mode",
+                    "pause_when_empty": "pause_when_empty",
+                    "session_retry_seconds": "session_retry_seconds"
+                }
+            }
+        ]
+    }
+]

@@ -1,0 +1,27 @@
+[
+    {
+        "UpdateStageName": "Server Download",
+        "UpdateSourcePlatform": "All",
+        "UpdateSource": "SteamCMD",
+        "UpdateSourceData": "4550060",
+        "UpdateSourceArgs": "3669570",
+        "ForceDownloadPlatform": "Windows",
+        "SkipOnFailure": false
+    },
+    {
+        "UpdateStageName": "ServerConfig.ini Create",
+        "UpdateSourcePlatform": "All",
+        "UpdateSource": "Executable",
+        "UpdateSourceData": "/bin/bash",
+        "UpdateSourceArgs": "-c \"if [[ ! -f \\\"{{$FullBaseDir}}ServerConfig.ini\\\" ]]; then printf '%s' $'; Alchemy Factory Dedicated Server config\\n[ServerSettings]\\nserver_name=AMP Powered Alchemy Factory Server\\nserver_public=1\\nserver_port=9877\\nquery_port=9878\\nserver_relay=1\\nserver_lan=0\\nserver_password=\\nadmin_password=\\nmax_clients=10\\nmax_admins=1\\nautosave_mode=1\\npause_when_empty=1\\nsession_retry_seconds=10\\n' > \\\"{{$FullBaseDir}}ServerConfig.ini\\\"; fi\"",
+        "SkipOnFailure": false
+    },
+    {
+        "UpdateStageName": "Proton GE Download",
+        "UpdateSourcePlatform": "Linux",
+        "UpdateSource": "Executable",
+        "UpdateSourceData": "/bin/bash",
+        "UpdateSourceArgs": "-c \"cd \\\"{{$FullRootDir}}\\\"; mkdir -p \\\"{{$FullRootDir}}.proton/compatdata\\\" \\\"{{$FullBaseDir}}.steam/steam\\\" \\\"{{$FullBaseDir}}.steam/sdk32\\\" \\\"{{$FullBaseDir}}.steam/sdk64\\\" \\\"{{$FullBaseDir}}.config/protonfixes\\\" && \\cp -f \\\"{{$FullRootDir}}linux64/steamclient.so\\\" \\\"{{$FullBaseDir}}.steam/sdk64/\\\" 2>/dev/null; \\cp -f \\\"{{$FullRootDir}}linux32/steamclient.so\\\" \\\"{{$FullBaseDir}}.steam/sdk32/\\\" 2>/dev/null; ProtonVersion=\\\"{{SpecificReleaseVersion}}\\\" && if [[ -x \\\"{{$FullRootDir}}.proton/proton\\\" && -f \\\"{{$FullRootDir}}.proton/version\\\" ]]; then read _ InstalledVersion < \\\"{{$FullRootDir}}.proton/version\\\"; else InstalledVersion=\\\"\\\"; fi; if [[ -z \\\"$ProtonVersion\\\" ]]; then ProtonVersion=$(wget -qO- https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | jq -r .tag_name); fi; if [[ ! \\\"$ProtonVersion\\\" =~ ^GE-Proton[0-9]+-[0-9]+$ ]]; then echo \\\"Invalid Proton GE release version format specified\\\" && exit 1; elif [[ \\\"$InstalledVersion\\\" == \\\"$ProtonVersion\\\" ]]; then echo \\\"Proton GE version $ProtonVersion already installed. Skipping\\\" && exit 0; else [[ -f GE-Proton.tar.gz ]] && rm -f GE-Proton.tar.gz >/dev/null 2>&1; suffix=\\\"\\\"; ver=\\\"${ProtonVersion#GE-Proton}\\\"; major=\\\"${ver%%-*}\\\"; minor=\\\"${ver#*-}\\\"; if (( major > 11 || (major == 11 && minor >= 4) )); then suffix=\\\"-x86_64\\\"; fi; wget -qO GE-Proton.tar.gz https://github.com/GloriousEggroll/proton-ge-custom/releases/download/$ProtonVersion/${ProtonVersion}${suffix}.tar.gz || { echo \\\"Proton GE download failed from GitHub. Aborting\\\"; exit 1; }; rm -rf \\\"{{$FullRootDir}}.proton/compatdata/\\\"* >/dev/null 2>&1; tar -xzf GE-Proton.tar.gz -C \\\"{{$FullRootDir}}.proton\\\" --strip-components=1 && rm -f GE-Proton.tar.gz >/dev/null 2>&1 && echo \\\"Proton GE version $ProtonVersion downloaded\\\" && { STEAM_COMPAT_DATA_PATH=\\\"{{$FullRootDir}}.proton/compatdata\\\" STEAM_COMPAT_CLIENT_INSTALL_PATH=\\\"{{$FullBaseDir}}.steam/steam\\\" \\\"{{$FullRootDir}}.proton/proton\\\" PROTON_LOG=1 >/dev/null 2>&1; exit 0; }; fi\"",
+        "SkipOnFailure": false
+    }
+]
