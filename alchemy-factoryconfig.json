@@ -219,7 +219,7 @@
         "IsFlagArgument": false,
         "ParamFieldName": "SpecificReleaseVersion",
         "IncludeInCommandLine": false,
-        "DefaultValue": "",
+        "DefaultValue": "GE-Proton9-27",
         "Placeholder": "GE-Proton9-27",
         "EnumValues": {}
     }
